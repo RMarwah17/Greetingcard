@@ -414,8 +414,8 @@ textarea {
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  line-clamp: 2;
-  display: -webkit-box;
+  overflow: hidden;
+  margin-bottom: 10px;
   line-height: 1.5;
 }
 
@@ -543,35 +543,26 @@ textarea {
   position: relative;
 }
 
-/* Container untuk scaling kartu 1080px ke ukuran preview */
-.card-preview-scaler {
-  width: 1080px;
-  transform-origin: top left;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
 /* ── Card Render Structure (inside preview and for download) ── */
 .card-render {
-  width: 1080px;
-  /* Lebar tetap untuk kualitas HD */
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  background: var(--white);
 }
 
 .card-render-image {
   width: 100%;
+  aspect-ratio: 100 / 63;
   position: relative;
   overflow: hidden;
 }
 
 .card-render-image img {
   width: 100%;
-  height: auto;
-  /* Jangan scaling paksa, ikuti rasio asli */
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 
@@ -646,34 +637,34 @@ textarea {
 }
 
 .card-render-title {
-  font-size: 32px;
+  font-size: clamp(0.7rem, 3.5vw, 1rem);
   font-weight: 400;
   color: rgba(255, 255, 255, 0.9);
   font-family: 'Playfair Display', serif;
-  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
   letter-spacing: 0.03em;
 }
 
 .card-render-big {
   font-family: 'Playfair Display', serif;
-  font-size: 110px;
+  font-size: clamp(1.4rem, 7.5vw, 2.2rem);
   font-weight: 700;
   color: var(--white);
-  text-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
   line-height: 1.05;
-  margin: 10px 0;
+  margin: 2px 0;
 }
 
 .card-render-date-line {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 15px;
+  gap: 6px;
   color: rgba(255, 255, 255, 0.85);
-  font-size: 24px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  font-size: clamp(0.55rem, 2.5vw, 0.75rem);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
   letter-spacing: 0.04em;
-  margin-top: 12px;
+  margin-top: 4px;
 }
 
 .card-render-date-line::before,
@@ -682,7 +673,7 @@ textarea {
   flex: 1;
   height: 1px;
   background: rgba(255, 255, 255, 0.45);
-  max-width: 100px;
+  max-width: 30px;
 }
 
 .card-render-quote {
@@ -690,31 +681,33 @@ textarea {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 24px 36px;
+  padding: 8px 12px 10px;
   text-align: center;
   font-style: italic;
-  font-size: 28px;
+  font-size: clamp(0.6rem, 2.8vw, 0.82rem);
   color: rgba(255, 255, 255, 0.92);
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
   letter-spacing: 0.01em;
 }
 
 /* ── White Box Section ── */
 .card-render-white {
+  flex: 1;
   background: var(--white);
-  padding: 30px 40px;
-  /* Beri padding yang lebih proporsional untuk 1080px */
+  padding: 10px 14px;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  min-height: 0;
 }
 
 .card-render-message {
-  font-size: 30px;
+  font-size: clamp(0.58rem, 2.5vw, 0.8rem);
   color: #333;
   font-style: italic;
-  line-height: 1.6;
+  line-height: 1.5;
   flex: 1;
-  margin-bottom: 24px;
+  margin-bottom: 6px;
 }
 
 .card-render-bottom {
@@ -730,7 +723,7 @@ textarea {
 }
 
 .card-render-from-label {
-  font-size: 20px;
+  font-size: clamp(0.55rem, 2vw, 0.7rem);
   font-weight: 700;
   color: #444;
   text-transform: uppercase;
@@ -739,7 +732,7 @@ textarea {
 }
 
 .card-render-from-name {
-  font-size: 32px;
+  font-size: clamp(0.62rem, 2.5vw, 0.82rem);
   font-weight: 600;
   color: #222;
   word-wrap: break-word;
@@ -747,7 +740,7 @@ textarea {
 }
 
 .card-render-untuk {
-  font-size: 24px;
+  font-size: clamp(0.56rem, 2vw, 0.72rem);
   color: #666;
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -794,10 +787,10 @@ textarea {
 }
 
 .card-render-user-logo {
-  height: 120px;
-  width: 120px;
+  height: clamp(24px, 7vw, 40px);
+  width: clamp(24px, 7vw, 40px);
   object-fit: contain;
-  border-radius: 8px;
+  border-radius: 4px;
   border: 1px solid var(--border);
 }
 

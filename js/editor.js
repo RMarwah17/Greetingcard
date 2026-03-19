@@ -1,6 +1,7 @@
 // ===================================================
-// KARTU UCAPAN - Editor Module
-// Handles modal, real-time card preview, download
+// KARTU UCAPAN - Modul Editor
+// Menangani modal, preview kartu secara real-time, dan pengunduhan gambar.
+// Diupdate pada: 2026-03-20 | Versi: 1.0.1
 // ===================================================
 
 let currentCard = null;
@@ -8,7 +9,8 @@ let currentMessageIndex = 0;
 let userLogoDataUrl = null;
 let captionMessageIndex = 0;
 
-// ── Open Editor ────────────────────────────────────
+// ── Membuka Editor ────────────────────────────────────
+// Fungsi ini dijalankan saat pengguna memilih salah satu kartu dari galeri.
 function openEditor(card) {
   currentCard = card;
   currentMessageIndex = 0;
@@ -106,7 +108,28 @@ function buildCardHTML(card, opts = {}) {
 function renderCardPreview() {
   if (!currentCard) return;
   const preview = document.getElementById('cardPreview');
-  preview.innerHTML = buildCardHTML(currentCard, getFormValues());
+  const cardHTML = buildCardHTML(currentCard, getFormValues());
+
+  // Bungkus dalam scaler untuk menjaga rasio tetap 1080px asli
+  preview.innerHTML = `
+    <div class="card-preview-scaler" id="cardPreviewScaler">
+      ${cardHTML}
+    </div>
+  `;
+
+  // Tunggu sebentar agar DOM selesai dirender sebelum menghitung tinggi
+  setTimeout(() => {
+    const scaler = document.getElementById('cardPreviewScaler');
+    const containerWidth = preview.offsetWidth || 340;
+    const scale = containerWidth / 1080;
+
+    if (scaler) {
+      scaler.style.transform = `scale(${scale})`;
+      // Sesuaikan tinggi container preview agar pas dengan kartu yang diskalakan
+      const scaledHeight = scaler.offsetHeight * scale;
+      preview.style.height = scaledHeight + 'px';
+    }
+  }, 10);
 }
 
 // ── Get Form Values ────────────────────────────────
@@ -119,6 +142,10 @@ function getFormValues() {
   };
 }
 
+/**
+ * downloadCard: Fungsi utama untuk mengubah elemen HTML menjadi gambar (PNG)
+ * menggunakan pustaka html2canvas.
+ */
 async function downloadCard() {
   if (!currentCard) return;
   showSpinner('Membuat gambar...');
@@ -127,34 +154,27 @@ async function downloadCard() {
     // Wait for all Google Fonts to be fully loaded
     await document.fonts.ready;
 
-    // We use the exact width of the preview to maintain 100% identical aspect ratio and text wrapping.
-    const previewContainer = document.getElementById('cardPreview');
-    const previewWidth = previewContainer.offsetWidth || 340;
-    const targetExportWidth = 1080; // The desired final image width in pixels
-
+    // Buat container tersembunyi untuk capture resolusi tinggi (1080px)
     const container = document.createElement('div');
     container.style.cssText = `
       position: fixed;
       left: -9999px;
       top: -9999px;
       z-index: -9999;
-      width: ${previewWidth}px;
+      width: 1080px;
       height: auto;
-      overflow: hidden;
-      border-radius: 0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
       visibility: hidden;
     `;
 
-    // Convert background image to data URL to avoid CORS/file:// issues
+    // Konversi gambar background ke Data URL untuk menghindari masalah CORS
     const bgDataUrl = await imageToDataUrl(currentCard.bgImage);
 
-    // Build HTML (without .export-mode so it styles identically to preview)
+    // Build HTML (langsung 1080px tanpa perlu scaling lagi)
     container.innerHTML = buildCardHTML(currentCard, { ...getFormValues(), forExport: true, bgImageDataUrl: bgDataUrl });
 
     document.body.appendChild(container);
 
-    // Wait for all images inside the container to fully load
+    // Pastikan semua gambar di dalam container selesai dimuat
     const images = container.querySelectorAll('img');
     await Promise.all(Array.from(images).map(img => {
       if (img.complete && img.naturalWidth > 0) return Promise.resolve();
@@ -164,15 +184,14 @@ async function downloadCard() {
       });
     }));
 
-    // Extra safety delay for rendering to settle
-    await new Promise(r => setTimeout(r, 300));
+    // Delay singkat untuk memastikan rendering browser stabil
+    await new Promise(r => setTimeout(r, 400));
 
-    // Make visible right before capture (hidden was to prevent flash)
     container.style.visibility = 'visible';
 
-    const scaleFactor = targetExportWidth / previewWidth;
+    // Capture langsung ukuran asli (1080px)
     const canvas = await html2canvas(container.firstElementChild, {
-      scale: scaleFactor, // Scales up the preview DOM to exactly 1080px width
+      scale: 1, // Skala 1 karena elemen sudah berukuran 1080px
       useCORS: true,
       allowTaint: true,
       backgroundColor: '#ffffff',
