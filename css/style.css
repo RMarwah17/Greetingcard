@@ -7,8 +7,8 @@
 
 /* ── CSS Variables ── */
 :root {
-  --white: #ffffff;
-  --gold-light: #e0e0e0;
+  --gold: #C9A84C;
+  --gold-light: #E8C96A;
   --teal: #0F4C5C;
   --teal-mid: #156F85;
   --teal-light: #E6F4F7;
@@ -74,10 +74,8 @@ textarea {
   left: 0;
   right: 0;
   z-index: 100;
-  background: rgba(0, 26, 32, 0.95);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(201, 168, 76, 0.3);
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
   padding: 0 24px;
   height: 64px;
 }
@@ -110,11 +108,65 @@ textarea {
   letter-spacing: 0.02em;
 }
 
-.nav-subtitle {
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.6);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-link {
+  color: var(--text);
+  font-size: 0.9rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color var(--transition);
+}
+
+.nav-link:hover {
+  color: var(--teal-mid);
+}
+
+.nav-btn {
+  background: var(--teal);
+  color: var(--white);
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all var(--transition);
+  box-shadow: 0 4px 12px rgba(15, 76, 92, 0.2);
+}
+
+.nav-btn:hover {
+  background: var(--teal-mid);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 76, 92, 0.3);
+}
+
+@media (max-width: 640px) {
+  .nav-subtitle {
+    display: none;
+  }
+
+  .nav-actions {
+    gap: 12px;
+  }
+
+  .nav-link {
+    font-size: 0.8rem;
+  }
+
+  .nav-btn {
+    padding: 6px 12px;
+    font-size: 0.75rem;
+  }
 }
 
 /* ══════════════════════════════════════════════════
@@ -794,8 +846,11 @@ textarea {
 }
 
 .card-render-user-logo {
-  height: 120px;
-  width: 120px;
+  height: auto;
+  width: auto;
+  max-height: 120px;
+  max-width: 200px;
+  /* Batasi lebar maksimal agar tidak menutupi teks */
   object-fit: contain;
   border-radius: 8px;
   border: 1px solid var(--border);
@@ -830,7 +885,7 @@ textarea {
 
 .btn-download {
   background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
-  color: var(--dark);
+  color: var(--white);
   box-shadow: 0 4px 16px rgba(201, 168, 76, 0.4);
 }
 
