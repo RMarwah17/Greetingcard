@@ -1,6 +1,7 @@
 // ===================================================
-// KARTU UCAPAN - Main Gallery Module
-// Handles card grid rendering and category filtering
+// KARTU UCAPAN - Modul Galeri Utama
+// Menangani penampilan grid kartu dan penyaringan kategori.
+// Diupdate pada: 2026-03-20 | Versi: 1.0.1
 // ===================================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -9,7 +10,8 @@ document.addEventListener('DOMContentLoaded', () => {
   setupHeroScroll();
 });
 
-// ── Render Card Grid ───────────────────────────────
+// ── Merender Grid Kartu ───────────────────────────────
+// Menampilkan daftar kartu berdasarkan kategori yang dipilih.
 function renderGallery(category) {
   const grid = document.getElementById('cardsGrid');
   grid.innerHTML = '';

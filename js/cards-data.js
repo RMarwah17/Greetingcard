@@ -1,7 +1,13 @@
 // ===================================================
-// KARTU UCAPAN HARI BESAR ISLAM - Card Template Data
+// KARTU UCAPAN HARI BESAR ISLAM - Data Template Kartu
+// File ini berisi database kartu ucapan dan pesan default.
+// Diupdate pada: 2026-03-20 | Versi: 1.0.1
 // ===================================================
 
+/**
+ * CARDS_DATA: Array objek yang menyimpan semua konfigurasi kartu ucapan.
+ * Setiap objek merepresentasikan satu desain kartu.
+ */
 const CARDS_DATA = [
   // ── RAMADAN ──────────────────────────────────────
   {
